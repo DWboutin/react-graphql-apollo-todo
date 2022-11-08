@@ -1,6 +1,12 @@
-import { FunctionComponent, ReactNode, useState } from 'react'
+import { FunctionComponent, ReactNode, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import noop from '../../../utils/noop'
+import {
+  ApolloQueryResult,
+  gql,
+  OperationVariables,
+  useMutation,
+} from '@apollo/client'
 
 const Form = styled.form`
   margin-top: 3rem;
@@ -43,13 +49,44 @@ const Button = styled.button`
   }
 `
 
-export interface Props {}
+const CreateTodoQuery = gql`
+  mutation CreateTodo($data: CreateTodoArgs!) {
+    createTodo(data: $data) {
+      id
+      task
+      completed
+    }
+  }
+`
 
-const NewTodoForm: FunctionComponent<Props> = () => {
+export interface Props {
+  refetchTodos: () => void
+}
+
+const NewTodoForm: FunctionComponent<Props> = ({ refetchTodos }) => {
   const [value, setValue] = useState('')
+  const [saveTodo] = useMutation(CreateTodoQuery)
+
+  const handleSubmit = useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault()
+
+      await saveTodo({
+        variables: {
+          data: {
+            task: value,
+          },
+        },
+      })
+
+      setValue('')
+      refetchTodos()
+    },
+    [value]
+  )
 
   return (
-    <Form onSubmit={noop}>
+    <Form onSubmit={handleSubmit}>
       <Label htmlFor="task">New todo</Label>
       <Input
         value={value}

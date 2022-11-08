@@ -6,3 +6,9 @@
   `git clone -b starter git@github.com:DWboutin/react-graphql-apollo-todo.git`
 - `cd react-graphql-apollo-todo`
 - `npm install`
+
+## Start the project
+
+- Open 2 terminal
+- In the first run `npm run server`
+- In the second run `npm run dev`
