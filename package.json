@@ -2,22 +2,34 @@
   "name": "react-graphql-apollo-todolist",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "json-api": "json-server ./server/data/db.json",
+    "graphql-server": "ts-node ./server/index.ts",
+    "server": "concurrently \"npm run json-api\" \"npm run graphql-server\""
   },
   "dependencies": {
+    "@apollo/client": "^3.7.1",
+    "@apollo/datasource-rest": "^4.3.2",
+    "@apollo/server": "^4.1.1",
+    "@graphql-tools/load-files": "^6.6.1",
+    "@graphql-tools/merge": "^8.3.11",
+    "apollo-errors": "^1.9.0",
+    "apollo-resolvers": "^1.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
+    "@types/node": "^18.11.9",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@types/styled-components": "^5.1.26",
     "@vitejs/plugin-react": "^2.2.0",
+    "concurrently": "^7.5.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"
   }

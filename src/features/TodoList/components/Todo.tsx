@@ -7,7 +7,7 @@ export interface TodoProps {
   completed?: boolean
 }
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   margin: 0 -3rem 4px;
   padding: 1.1rem 3rem;

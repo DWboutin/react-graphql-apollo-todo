@@ -1,7 +1,8 @@
+import { gql, useQuery } from '@apollo/client'
 import { FunctionComponent, ReactNode, useState } from 'react'
 import styled from 'styled-components'
 import NewTodoForm from '../../NewTodoForm/components/NewTodoForm'
-import Todo, { TodoType } from './Todo'
+import Todo, { TodoType, Container as TodoContainer } from './Todo'
 
 const Container = styled.div`
   margin: 4rem auto;
@@ -31,11 +32,27 @@ const List = styled.div`
   margin-top: 2.6rem;
 `
 
+const TodosQuery = gql`
+  query Query {
+    todos {
+      id
+      task
+      completed
+    }
+  }
+`
+
+type TodoQueryData = {
+  todos: TodoType[]
+}
+
 const TodoList: FunctionComponent = () => {
-  const todos: TodoType[] = [
-    { id: '1', task: 'task 1', completed: false },
-    { id: '2', task: 'task 2', completed: true },
-  ]
+  const { loading, error, data, refetch } = useQuery<TodoQueryData>(TodosQuery)
+  const todos = data?.todos || []
+
+  const refetchTodos = () => {
+    refetch()
+  }
 
   return (
     <Container>
@@ -43,11 +60,17 @@ const TodoList: FunctionComponent = () => {
         Todo List <span>A simple React Todo List App</span>
       </Title>
       <List>
-        {todos.map((todo) => (
-          <Todo key={todo.id} todo={todo} />
-        ))}
+        {loading && <TodoContainer>Is laoding...</TodoContainer>}
+        {!loading && error && (
+          <TodoContainer>
+            <>Error: {error}</>
+          </TodoContainer>
+        )}
+        {!loading &&
+          todos.length > 0 &&
+          todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
       </List>
-      <NewTodoForm />
+      <NewTodoForm refetchTodos={refetchTodos} />
     </Container>
   )
 }

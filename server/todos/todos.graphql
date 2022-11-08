@@ -1,0 +1,23 @@
+type Query {
+  "Query to get todos"
+  todos: [Todo]
+}
+
+"A todo"
+type Todo {
+  id: String!
+  "todo's title"
+  task: String!
+  "todo's author"
+  authorId: String!
+  "the todo is checked"
+  completed: Boolean!
+}
+
+type Mutation {
+  createTodo(data: CreateTodoArgs!): Todo
+}
+
+input CreateTodoArgs {
+  task: String!
+}
