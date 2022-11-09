@@ -7,11 +7,16 @@ import {
   OperationVariables,
   useMutation,
 } from '@apollo/client'
+import Button from '../../../components/Button/Button'
 
 const Form = styled.form`
   margin-top: 3rem;
   display: flex;
   flex-wrap: wrap;
+
+  button {
+    margin-left: 5px;
+  }
 `
 
 const Label = styled.label`
@@ -28,25 +33,6 @@ const Input = styled.input`
   font-size: initial;
   font-family: 'Quicksand', sans-serif;
   height: 3rem;
-`
-
-const Button = styled.button`
-  padding: 0 1.3rem;
-  border: none;
-  background: #ff6666;
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  margin-left: 5px;
-  cursor: pointer;
-  transform: background 0.2s ease-out;
-  font-family: 'Quicksand', sans-serif;
-  height: 3rem;
-
-  &:hover {
-    background: #ff5e5e;
-  }
 `
 
 const CreateTodoQuery = gql`

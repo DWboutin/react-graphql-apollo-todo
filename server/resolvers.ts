@@ -1,7 +1,7 @@
 import { isInstance } from 'apollo-errors'
 import { createResolver } from 'apollo-resolvers'
 
-import { UnknownError } from './errors'
+import { UnauthorizedError, UnknownError } from './errors'
 
 export const baseResolver = createResolver(null, (_, __, ___, error) => {
   if (isInstance(error)) {
@@ -14,3 +14,11 @@ export const baseResolver = createResolver(null, (_, __, ___, error) => {
     },
   })
 })
+
+export const isAuthenticatedResolver = baseResolver.createResolver(
+  (_, __, context) => {
+    const { user } = context
+
+    if (!user) throw new UnauthorizedError()
+  }
+)
