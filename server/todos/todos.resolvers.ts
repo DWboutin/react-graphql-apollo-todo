@@ -1,23 +1,27 @@
-import { baseResolver } from '../resolvers'
+import { isAuthenticatedResolver } from '../resolvers'
 
-const todosResolver = baseResolver.createResolver((_, __, context) => {
-  const { dataSources } = context
+const todosResolver = isAuthenticatedResolver.createResolver(
+  (_, __, context) => {
+    const { dataSources } = context
 
-  return dataSources.todosAPI.getTodoList()
-})
+    return dataSources.todosAPI.getTodoList()
+  }
+)
 
-const createTodoResolver = baseResolver.createResolver((_, args, context) => {
-  const {
-    data: { task },
-  } = args
-  const { dataSources } = context
+const createTodoResolver = isAuthenticatedResolver.createResolver(
+  (_, args, context) => {
+    const {
+      data: { task },
+    } = args
+    const { dataSources } = context
 
-  return dataSources.todosAPI.createTodo({
-    task,
-    authorId: 'fakeId',
-    completed: false,
-  })
-})
+    return dataSources.todosAPI.createTodo({
+      task,
+      authorId: 'fakeId',
+      completed: false,
+    })
+  }
+)
 
 const resolvers = {
   Query: {

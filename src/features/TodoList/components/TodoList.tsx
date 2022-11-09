@@ -1,6 +1,10 @@
 import { gql, useQuery } from '@apollo/client'
+import { useAuth0 } from '@auth0/auth0-react'
+import { ApolloError } from 'apollo-errors'
 import { FunctionComponent, ReactNode, useState } from 'react'
 import styled from 'styled-components'
+import LoginButton from '../../AuthButtons/LoginButton'
+import LogoutButton from '../../AuthButtons/LogoutButton'
 import NewTodoForm from '../../NewTodoForm/components/NewTodoForm'
 import Todo, { TodoType, Container as TodoContainer } from './Todo'
 
@@ -29,7 +33,12 @@ const Title = styled.h1`
 `
 
 const List = styled.div`
-  margin-top: 2.6rem;
+  margin-top: 2rem;
+`
+
+const AuthSection = styled.div`
+  margin-top: 1rem;
+  text-align: right;
 `
 
 const TodosQuery = gql`
@@ -47,6 +56,7 @@ type TodoQueryData = {
 }
 
 const TodoList: FunctionComponent = () => {
+  const { isAuthenticated } = useAuth0()
   const { loading, error, data, refetch } = useQuery<TodoQueryData>(TodosQuery)
   const todos = data?.todos || []
 
@@ -63,14 +73,20 @@ const TodoList: FunctionComponent = () => {
         {loading && <TodoContainer>Is laoding...</TodoContainer>}
         {!loading && error && (
           <TodoContainer>
-            <>Error: {error}</>
+            <div>Error...</div>
+            {}
+            <div>Error...</div>
           </TodoContainer>
         )}
         {!loading &&
           todos.length > 0 &&
           todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
       </List>
-      <NewTodoForm refetchTodos={refetchTodos} />
+      {isAuthenticated && <NewTodoForm refetchTodos={refetchTodos} />}
+      <AuthSection>
+        {!isAuthenticated && <LoginButton>Sign in</LoginButton>}
+        {isAuthenticated && <LogoutButton>Sign out</LogoutButton>}
+      </AuthSection>
     </Container>
   )
 }
